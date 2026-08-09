@@ -1,0 +1,42 @@
+# Lessons — {{TITLE}}
+
+Promoted lessons from the Learning Loop. Each lesson cites evidence and is git-versioned.
+
+**Promotion gate:** A candidate lesson reaches this file only via Carson's explicit approval OR after appearing in 3+ consistent reflections. No silent promotion.
+
+**Structure:** Lessons are structured, not prose. Enables deduplication and contradiction-checking.
+
+---
+
+## Lessons
+
+(This file starts empty. Lessons accumulate over time as the skill runs.)
+
+### Lesson template
+
+```
+### L{N} — {{BRIEF_NAME}}
+- **Trigger:** [specific condition observed]
+- **Action:** [what this lesson proposes the skill do]
+- **Evidence:** [external signal — error message, user correction, tool output, explicit user utterance]
+- **Confidence:** N/M runs
+- **Promoted:** YYYY-MM-DD (method: [3-run confirmation / explicit user approval])
+- **Last applied:** YYYY-MM-DD
+```
+
+---
+
+## Lesson maintenance
+
+- **Contradiction check:** Before a new lesson is promoted, it's diffed against existing lessons. Contradictions surface to Carson.
+- **Expiry:** Lessons unused for K invocations (default: 30 days of no match) are archived, not deleted. Archive section below.
+- **Rollback:** Every promotion is a git commit. Revert the commit to roll back.
+- **Audit:** Run `node scripts/learning-audit.js` to check lesson health — usage rates, contradictions, staleness.
+
+---
+
+## Archived lessons
+
+Lessons that were promoted but later archived (unused, contradicted by new evidence, or user-archived).
+
+(Empty initially.)

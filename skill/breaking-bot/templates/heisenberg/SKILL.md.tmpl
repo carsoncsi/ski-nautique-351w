@@ -1,0 +1,180 @@
+---
+name: {{SLUG}}
+description: >-
+  {{PURPOSE}}. {{ONE_LINE_CAPABILITY}}. Use when Carson says "{{TRIGGER_1}}",
+  "{{TRIGGER_2}}", "{{TRIGGER_3}}", "{{TRIGGER_4}}", "/{{SLUG}}", or
+  {{TRIGGER_DESCRIPTION}}.
+user_invocable: true
+argument: "{{ARGUMENT_HINT}}"
+context_cost: {{CONTEXT_COST}}
+learns: {{LEARNS_FLAG}}
+{{KNOWLEDGE_RECENCY_LINE_IF_KB}}
+---
+
+<!-- {{KNOWLEDGE_RECENCY_LINE_IF_KB}}: for knowledge-heavy skills, emit
+     `knowledge_last_refreshed: YYYY-MM-DD` (feature #15). Otherwise DELETE the
+     placeholder line entirely — do not ship an empty frontmatter key. A date in
+     frontmatter is cache-safe (frontmatter is config, not cached body). -->
+
+# {{TITLE}}
+
+{{ONE_PARAGRAPH_INTRO}}
+
+{{PERSONA_OPENER_IF_APPLICABLE}}
+
+## Mission
+{{MISSION_ONE_PARAGRAPH}}
+
+Full charter: [`CHARTER.md`](CHARTER.md) — immutable. Do not modify during runs.
+
+## When to use
+- {{USE_CASE_1}}
+- {{USE_CASE_2}}
+- {{USE_CASE_3}}
+
+## When NOT to use
+- {{ANTI_USE_1}}
+- {{ANTI_USE_2}}
+- {{ANTI_USE_3}}
+
+## Category
+{{CATEGORY}} — see [`reference/gotchas.md`](reference/gotchas.md) for category-specific traps.
+
+## Inputs
+{{INPUT_SHAPE}}
+
+## Output (declared contract)
+{{OUTPUT_CONTRACT}}
+
+## Dependencies
+Required before this skill runs:
+{{DEPENDENCIES}}
+
+<!-- KEEP `## Voice` only if this skill has a persona. No-persona (utility-first)
+     skills: DELETE this whole section and the persona.md link in Further reading. -->
+
+## Voice
+
+{{PERSONA_ON_OFF_MAPPING}}
+
+Detail in [`reference/persona.md`](reference/persona.md). Loaded only in voice-on phases.
+
+## Phases
+
+### Phase 1 — {{PHASE_1_NAME}}  *({{PHASE_1_VOICE}})*
+{{PHASE_1_STEPS}}
+
+### Phase 2 — {{PHASE_2_NAME}}  *({{PHASE_2_VOICE}})*
+{{PHASE_2_STEPS}}
+
+### Phase 3 — {{PHASE_3_NAME}}  *({{PHASE_3_VOICE}})*
+{{PHASE_3_STEPS}}
+
+<!-- Add as many `### Phase N` blocks as the skill actually has, then delete this
+     comment. Don't ship a literal "Phase N" / "..." — every phase is real. -->
+
+**Re-state the voice rule at every phase transition.** Persona drift is architectural.
+
+## Input pre-flight
+Before expensive work starts, validate:
+{{PREFLIGHT_CHECKS}}
+
+Run `scripts/validate.js` to execute pre-flight. Fail fast with clear messages.
+
+## Pushback calibration
+{{PUSHBACK_POSTURE}}
+
+## Gates {{GATES_SECTION_IF_GATED}}
+
+<!-- Feature #19. KEEP this section only if this skill has human-approval gates
+     (interview-driven, planning, or any step that authorizes irreversible work).
+     A frictionless "just do it" skill has no gates — DELETE this whole section. -->
+
+This skill renders the shared **Gate Schema** at every hard gate — the fixed decision
+block from [`~/.claude/skills/_shared/gate-schema.md`](../_shared/gate-schema.md):
+`summary / what_changed / evidence / gaps / strongest_objection / limits_hit / recommendation`.
+
+- **Hard gates (full schema, Carson must decide):** {{HARD_GATES}}
+- **Reversible / mechanical (no gate):** {{UNGATED_STEPS}}
+- `gaps` and `limits_hit` are non-negotiable fields. An empty `gaps` claims full coverage — only write it if true.
+- Barrier only at irreversible / high-blast-radius moments. Gating everything trains rubber-stamping.
+
+## Research doctrine (if applicable)
+{{RESEARCH_DOCTRINE}}
+
+## Workflow Embedding
+
+**Invoke when:** {{WHEN_INVOKE}}
+**Before this skill:** {{CHAIN_IN}}
+**After this skill:** {{CHAIN_OUT}}
+**Frequency:** {{FREQUENCY}}
+
+**Chains with:**
+{{SKILL_CHAINS}}
+
+## Data Contracts
+
+This skill WRITES:
+{{WRITES}}
+
+This skill READS:
+{{READS}}
+
+## Failure Modes
+See [`reference/gotchas.md`](reference/gotchas.md). Summary:
+- {{TOP_FAILURE_1}}
+- {{TOP_FAILURE_2}}
+
+## Purity Standard
+How to tell good output from garbage:
+1. {{PURITY_1}}
+2. {{PURITY_2}}
+3. {{PURITY_3}}
+
+Full acceptance criteria: [`reference/principles.md`](reference/principles.md).
+
+<!-- KEEP the `## Learning Loop` section below ONLY if `learns: true`.
+     For `learns: false` skills, DELETE the whole section — don't ship stale
+     "If learns: true" prose or a trailing placeholder. -->
+
+## Learning Loop
+
+- After each run, reflection written to `scratch/reflections/<run-id>.md`
+- Patterns seen 3+ times surface for promotion to `reference/lessons.md` on next invocation
+- CHARTER.md is immutable — the Loop can never modify it
+- Health check: `node scripts/learning-audit.js`
+- Full architecture: [`reference/learning-loop.md`](reference/learning-loop.md)
+
+## "Teach me" mode
+Invoke with no args to get a self-explanation: `/{{SLUG}}`
+
+## Cold start
+Try it: `/{{SLUG}} {{EXAMPLE_INVOCATION}}`
+
+## Further reading
+
+<!-- PRUNE every line below whose file you did not actually generate — a link to a
+     missing file is a shipped defect. The (conditional) lines are the usual cuts. -->
+
+- [`CHARTER.md`](CHARTER.md) — immutable purpose, non-goals, invariants
+- [`THE-RECIPE.md`](THE-RECIPE.md) — Heisenberg's parting note (read once)
+- [`reference/persona.md`](reference/persona.md) — voice bible *(conditional: only if this skill has a persona)*
+- [`reference/philosophy.md`](reference/philosophy.md) — principles this skill won't violate
+- [`reference/principles.md`](reference/principles.md) — core knowledge (digested from sources)
+- [`reference/frameworks.md`](reference/frameworks.md) — mental models *(conditional: only if generated during digestion)*
+- [`reference/examples.md`](reference/examples.md) — worked examples *(conditional: only if generated)*
+- [`reference/gotchas.md`](reference/gotchas.md) — failure modes + anti-patterns
+- [`reference/walkthroughs.md`](reference/walkthroughs.md) — Phase 8 test-invocation walkthroughs
+- [`reference/lessons.md`](reference/lessons.md) — promoted lessons *(conditional: only if `learns: true`)*
+- [`reference/learning-loop.md`](reference/learning-loop.md) — Learning Loop architecture *(conditional: only if `learns: true`)*
+- [`reference/sources/`](reference/sources/) — raw source material, NOT auto-loaded
+- [`scripts/`](scripts/) — deterministic lookups and validation
+
+## Hard Rules
+
+1. CHARTER.md is immutable. Never modified during runs.
+2. No timestamps in this SKILL.md body. Cache stability.
+3. Every reflection cites external evidence. No ungrounded lessons.
+4. Pushback calibration: {{PUSHBACK_POSTURE}}. Don't deviate.
+5. {{CUSTOM_HARD_RULE_1}}
+6. {{CUSTOM_HARD_RULE_2}}

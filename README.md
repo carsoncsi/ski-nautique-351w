@@ -7,12 +7,43 @@ The goal was to work out what actually has to be marine-spec versus what merely 
 down the durable facts about the swap, and map out where to buy parts — before spending money
 on something that goes back in the box nine days later.
 
-Two halves:
+Three parts:
 
 - **[`research/`](research/)** — the raw research round. Scope, then ~830 lines of findings,
   every claim carrying a source link and a confidence rating.
 - **[`skill/quint/`](skill/quint/)** — that research baked into a working Claude Code skill.
   A parts hunter with a persistent memory of this hull.
+- **[`skill/breaking-bot/`](skill/breaking-bot/)** — the meta-skill that *built* Quint. It
+  interviews you, researches, and generates a complete skill. Included so you can cook your own.
+
+---
+
+## Start here
+
+If you have [Claude Code](https://claude.com/claude-code) installed, clone this and run one
+command:
+
+```bash
+git clone https://github.com/carsoncsi/ski-nautique-351w
+cd ski-nautique-351w
+claude
+```
+
+Then type:
+
+```
+/start-here
+```
+
+It checks what's on your machine, gives you a two-minute tour, installs both skills, and walks
+you into building one of your own. If you'd rather do it by hand, the manual steps are further
+down.
+
+**Two things to know before your first run:** both skills will call you *Carson* — they're one
+person's working tools shipped as-is rather than sanded into a generic template, and the
+specificity is most of why they work. And Breaking Bot references a few sibling skills that
+aren't in this repo (`/claudefather`, `/ocean`, `/build-agent`); it'll occasionally suggest
+handing work off to one, and that suggestion just goes nowhere. Nothing breaks either way.
 
 ---
 
@@ -91,20 +122,27 @@ skill/quint/
     └── learning-audit.js   reviews what the skill has learned
 ```
 
-### Install
+### Install by hand
 
-Copy it into your skills directory:
+`/start-here` does this for you, but if you'd rather:
 
 ```bash
+mkdir -p ~/.claude/skills
 cp -r skill/quint ~/.claude/skills/quint
+cp -r skill/breaking-bot ~/.claude/skills/breaking-bot
 ```
 
-Then invoke it in Claude Code with `/quint` — or just describe a part or a symptom.
+Restart Claude Code so the new skills register, then invoke `/quint` — or just describe a part
+or a symptom.
 
-**Heads up:** the skill is written for *this* boat and addresses its owner by name throughout.
-If you're pointing it at a different hull, `reference/the-boat.md`, `reference/parts-ledger.md`,
-and `THE-RECIPE.md` are the files to rewrite. The regulatory and venue references
-(`marinization.md`, `venues.md`, `ebay-api.md`) apply to any gasoline inboard.
+### Pointing it at a different boat
+
+Quint is built for one specific hull. Rewrite `reference/the-boat.md`,
+`reference/parts-ledger.md`, and `THE-RECIPE.md` for yours. Keep `reference/marinization.md`,
+`reference/venues.md`, and `reference/ebay-api.md` as-is — those apply to any gasoline inboard.
+Replace `reference/351w-swap.md` if you're running a different engine family.
+
+`/start-here` will do the rewrite with you, interview-style, if you ask it to.
 
 ### Scripts
 
@@ -126,6 +164,32 @@ node skill/quint/scripts/ebay-api.js "damper plate pcm"
 for `ebay-api.js` is free; the signup path (including the compliance step that otherwise leaves
 your production keyset disabled) is documented in
 [`reference/ebay-api.md`](skill/quint/reference/ebay-api.md).
+
+---
+
+## Cooking your own skill
+
+[`skill/breaking-bot/`](skill/breaking-bot/) is the meta-skill that built Quint. You interview
+with it, it researches, and it generates a complete skill directory — charter, knowledge base,
+scripts, the works. Three tiers: *basic* (quick scaffold), *normal* (a solid working skill), and
+*Heisenberg* (the full treatment — baked-in research, persona, philosophy, learning loop). Quint
+is Heisenberg tier.
+
+```
+/breaking-bot
+```
+
+Start smaller than Quint. A good first cook is *normal* tier on something you already do by hand
+every week — where there's real judgment involved and getting it wrong has a cost you can name.
+
+Worth reading either way:
+[`skill/breaking-bot/scratch/reflections/2026-08-09-quint-cook.md`](skill/breaking-bot/scratch/reflections/2026-08-09-quint-cook.md)
+is Breaking Bot's own write-up of the run that produced Quint — what it caught, what broke, and
+what it learned. It's the seam between the two halves of this repo. One example from it: a
+generated search script shipped with a universal exclusion list containing the word `cover`,
+which would have silently zeroed out every search for a *timing cover* — the single most
+important part in the whole project. A realistic test query caught it; a placeholder wouldn't
+have.
 
 ---
 

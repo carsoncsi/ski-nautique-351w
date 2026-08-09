@@ -1,0 +1,71 @@
+---
+name: {{SLUG}}
+description: >-
+  {{PURPOSE}}. Use when Carson says "{{TRIGGER_1}}", "{{TRIGGER_2}}",
+  "{{TRIGGER_3}}", "/{{SLUG}}", or {{TRIGGER_DESCRIPTION}}.
+user_invocable: true
+argument: "{{ARGUMENT_HINT}}"
+context_cost: {{CONTEXT_COST}}
+---
+
+# {{TITLE}}
+
+{{ONE_PARAGRAPH_INTRO}}
+
+## When to use
+- {{USE_CASE_1}}
+- {{USE_CASE_2}}
+- {{USE_CASE_3}}
+
+## When NOT to use
+- {{ANTI_USE_1}}
+- {{ANTI_USE_2}}
+
+## Inputs
+{{INPUT_SHAPE}}
+
+## Output (declared contract)
+{{OUTPUT_CONTRACT}}
+
+## Dependencies
+{{DEPENDENCIES}}
+
+## Category
+{{CATEGORY}} — see `reference/gotchas.md` for category-specific traps.
+
+## Workflow
+
+### Step 1 — Input pre-flight
+Validate inputs before doing expensive work. Required checks:
+{{PREFLIGHT_CHECKS}}
+
+### Step 2 — {{STEP_2_NAME}}
+{{STEP_2_DETAIL}}
+
+### Step 3 — {{STEP_3_NAME}}
+{{STEP_3_DETAIL}}
+
+### Step 4 — {{STEP_4_NAME}}
+{{STEP_4_DETAIL}}
+
+## Pushback posture
+{{PUSHBACK_POSTURE}}
+
+## Workflow Embedding
+**Invoke when:** {{WHEN_INVOKE}}
+**Before this skill:** {{CHAIN_IN}}
+**After this skill:** {{CHAIN_OUT}}
+**Frequency:** {{FREQUENCY}}
+
+## Data Contracts
+{{DATA_CONTRACTS}}
+
+## Failure Modes
+See `reference/gotchas.md` for documented failure patterns.
+
+## Cold start
+Try it: `/{{SLUG}} {{EXAMPLE_ARG}}`
+
+## Further reading
+- `reference/gotchas.md` — known traps and how to recognize them
+- `reference/workflow.md` — detailed workflow notes (if this skill has multi-phase logic)

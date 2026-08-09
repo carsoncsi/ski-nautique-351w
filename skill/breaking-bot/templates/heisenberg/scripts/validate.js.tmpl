@@ -1,0 +1,59 @@
+#!/usr/bin/env node
+/**
+ * Input pre-flight validation for {{SLUG}}.
+ *
+ * Run before expensive work begins. Fail fast with clear messages.
+ * Code never enters Claude's context — only the output (pass/fail + message) does.
+ *
+ * Usage:   node scripts/validate.js <input_file_or_args>
+ * Exit:    0 = all checks passed | 1 = validation failed | 2 = unexpected error
+ *
+ * NOTE TO THE GENERATOR: the {{PLACEHOLDER}} bodies below MUST be filled with
+ * real checks. A validator that returns no errors validates nothing while
+ * printing "PRE-FLIGHT OK" — the exact "looks like success but isn't" failure
+ * this feature exists to prevent. If a placeholder survives, the cook is not done.
+ */
+
+const fs = require('fs');
+
+function checkDependencies() {
+  const errors = [];
+  // {{DEPENDENCY_CHECKS}}
+  // Example:
+  // if (!process.env.REQUIRED_API_KEY) errors.push('Missing env var: REQUIRED_API_KEY');
+  // if (!fs.existsSync('./required-file.md')) errors.push('Missing required file: ./required-file.md');
+  return errors;
+}
+
+function checkInputs(args) {
+  const errors = [];
+  // {{INPUT_VALIDATION}}
+  // Example:
+  // if (args.length < 1) errors.push('Usage: validate.js <target>');
+  // if (args[0] && !fs.existsSync(args[0])) errors.push(`Target file not found: ${args[0]}`);
+  return errors;
+}
+
+function checkInvariants() {
+  const errors = [];
+  // {{INVARIANT_CHECKS}}
+  return errors;
+}
+
+function main(args) {
+  const allErrors = [...checkDependencies(), ...checkInputs(args), ...checkInvariants()];
+  if (allErrors.length) {
+    console.log('PRE-FLIGHT FAILED:');
+    for (const err of allErrors) console.log(`  - ${err}`);
+    return 1;
+  }
+  console.log('PRE-FLIGHT OK');
+  return 0;
+}
+
+try {
+  process.exit(main(process.argv.slice(2)));
+} catch (e) {
+  console.error(`UNEXPECTED ERROR: ${e.message}`);
+  process.exit(2);
+}

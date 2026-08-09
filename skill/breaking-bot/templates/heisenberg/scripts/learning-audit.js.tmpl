@@ -1,0 +1,58 @@
+#!/usr/bin/env node
+/**
+ * Learning Loop health check for {{SLUG}}.
+ *
+ * Only generated when `learns: true`. Surfaces the health signals from the
+ * Learning Loop architecture so Carson can tell if the loop is actually working.
+ * Read-only: it reports, it never promotes or edits a lesson.
+ *
+ * Usage:   node scripts/learning-audit.js
+ * Exit:    0 = healthy | 1 = warnings surfaced
+ */
+
+const fs = require('fs');
+const path = require('path');
+
+const SKILL_ROOT = path.resolve(__dirname, '..');
+const LESSONS = path.join(SKILL_ROOT, 'reference', 'lessons.md');
+const REFLECTIONS = path.join(SKILL_ROOT, 'scratch', 'reflections');
+
+function read(p) {
+  try { return fs.readFileSync(p, 'utf8'); } catch { return ''; }
+}
+
+function main() {
+  const warnings = [];
+  const lessons = read(LESSONS);
+  const lessonCount = (lessons.match(/^###\s+L\d+/gm) || []).length;
+
+  let reflectionCount = 0;
+  try {
+    reflectionCount = fs.readdirSync(REFLECTIONS).filter(f => f.endsWith('.md') && f !== 'README.md').length;
+  } catch { /* dir may not exist yet */ }
+
+  // Signal 1 — is the loop catching anything?
+  if (reflectionCount >= 10 && lessonCount === 0) {
+    warnings.push(`${reflectionCount} reflections but 0 promoted lessons — either the skill is perfect or reflections aren't catching anything. Investigate.`);
+  }
+
+  // Signal 2 — contradiction smell (duplicate trigger lines)
+  const triggers = (lessons.match(/^-\s+\*\*Trigger:\*\*\s*(.+)$/gm) || []).map(s => s.toLowerCase().trim());
+  const dupes = triggers.filter((t, i) => triggers.indexOf(t) !== i);
+  if (dupes.length) {
+    warnings.push(`Possible contradictory/duplicate lessons — repeated triggers: ${[...new Set(dupes)].join(' | ')}`);
+  }
+
+  console.log(`Learning Loop health — {{SLUG}}`);
+  console.log(`  promoted lessons:   ${lessonCount}`);
+  console.log(`  pending reflections: ${reflectionCount}`);
+  if (warnings.length) {
+    console.log('\nWARNINGS:');
+    for (const w of warnings) console.log(`  - ${w}`);
+    return 1;
+  }
+  console.log('  status: healthy');
+  return 0;
+}
+
+process.exit(main());

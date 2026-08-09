@@ -1,0 +1,53 @@
+# Test-Invocation Walkthroughs — {{TITLE}}
+
+Feature #18. Breaking Bot wrote these during Phase 8 of the cook by mentally walking
+2-3 realistic invocations through this skill's workflow *before* first real use. They
+exist to surface holes cheaply — and to give the next instance a worked picture of
+what "running correctly" looks like.
+
+Each walkthrough: the invocation, the path it takes through the phases, the expected
+output, and any hole that was found and fixed (or left as a known limit).
+
+---
+
+## Walkthrough 1 — {{WALKTHROUGH_1_NAME}}
+
+**Invocation:** `/{{SLUG}} {{WALKTHROUGH_1_INPUT}}`
+
+**Path through the skill:**
+{{WALKTHROUGH_1_PATH}}
+
+**Expected output:** {{WALKTHROUGH_1_OUTPUT}}
+
+**Holes surfaced:** {{WALKTHROUGH_1_HOLES}}
+
+---
+
+## Walkthrough 2 — {{WALKTHROUGH_2_NAME}}
+
+**Invocation:** `/{{SLUG}} {{WALKTHROUGH_2_INPUT}}`
+
+**Path through the skill:**
+{{WALKTHROUGH_2_PATH}}
+
+**Expected output:** {{WALKTHROUGH_2_OUTPUT}}
+
+**Holes surfaced:** {{WALKTHROUGH_2_HOLES}}
+
+---
+
+## Walkthrough 3 — {{WALKTHROUGH_3_NAME}} *(edge case)*
+
+**Invocation:** `/{{SLUG}} {{WALKTHROUGH_3_INPUT}}`
+
+**Path through the skill:**
+{{WALKTHROUGH_3_PATH}}
+
+**Expected output:** {{WALKTHROUGH_3_OUTPUT}}
+
+**Holes surfaced:** {{WALKTHROUGH_3_HOLES}}
+
+---
+
+*If a walkthrough surfaced a hole that was NOT fixed, it belongs in `reference/gotchas.md`
+as a known failure mode — not buried here.*
